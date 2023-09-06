@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:product_management_mobile_application/admin/product/screen/product_screen.dart';
 import 'package:product_management_mobile_application/auth/models/login_response.dart';
 
+// ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
   LoginResponse? loginResponse;
   HomeScreen({super.key, this.loginResponse});

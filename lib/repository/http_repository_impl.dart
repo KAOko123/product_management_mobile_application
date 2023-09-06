@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
-import 'dart:math';
 
 import 'package:product_management_mobile_application/admin/product/model/Product.dart';
 import 'package:product_management_mobile_application/auth/models/login_request.dart';
@@ -25,55 +23,63 @@ class HttpRepositoryImpl extends Api implements HttpRepository {
             data: LoginResponse.fromJson(map));
       } else {
         return HttpBaseResponse(
-            code: 400,
-            isSuccess: false,
-            message: map['message'],
-            data: null
-        );
+            code: 400, isSuccess: false, message: map['message'], data: null);
       }
     } catch (e) {
       return HttpBaseResponse(
-          code: 500,
-          isSuccess: false,
-          message: e.toString(),
-          data: null
-      );
+          code: 500, isSuccess: false, message: e.toString(), data: null);
     }
   }
 
   @override
   Future<HttpBaseResponse<List<Product>>> getAllProduct() async {
     List<Product> list = [];
-    try{
+    try {
       var url = Uri.parse(getProductUrl);
       var response = await httpClient.get(url);
       final Map<String, dynamic> map = jsonDecode(response.body);
-      if(response.statusCode==200){
-        map["products"].forEach((e){
+      if (response.statusCode == 200) {
+        map["products"].forEach((e) {
           Product product = Product.fromJson(e);
           list.add(product);
         });
         return HttpBaseResponse(
-          code: 200,
-          isSuccess: true,
-          message: "Get Data Success",
-          data: list
-        );
-      }else{
+            code: 200,
+            isSuccess: true,
+            message: "Get Data Success",
+            data: list);
+      } else {
         return HttpBaseResponse(
-            code: 400,
-            isSuccess: false,
-            message: "Get Data Error",
-            data: null
-        );
+            code: 400, isSuccess: false, message: "Get Data Error", data: null);
       }
-    }catch(e){
+    } catch (e) {
       return HttpBaseResponse(
-          code: 500,
-          isSuccess: false,
-          message: e.toString(),
-          data: null
-      );
+          code: 500, isSuccess: false, message: e.toString(), data: null);
+    }
+  }
+
+  @override
+  Future<HttpBaseResponse<Product>> getProductById(int id) async {
+    try {
+      var url = Uri.parse(getProductIdUrl + id.toString());
+      var res = await httpClient.get(url).timeout(
+            Duration(seconds: 120),
+          );
+      final Map map = jsonDecode(res.body);
+
+      if (res.statusCode == 20) {
+        return HttpBaseResponse(
+            code: 200,
+            isSuccess: true,
+            message: "Get Product by Success",
+            data: Product.fromJson(map));
+      } else {
+        return HttpBaseResponse(
+            code: 400, isSuccess: false, message: "Get Data Error", data: null);
+      }
+    } catch (e) {
+      return HttpBaseResponse(
+          code: 500, isSuccess: false, message: e.toString(), data: null);
     }
   }
 }

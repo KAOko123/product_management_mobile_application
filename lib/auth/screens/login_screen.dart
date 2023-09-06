@@ -22,7 +22,10 @@ class _LoginScreenState extends State<LoginScreen> implements LoginView {
   @override
   void initState() {
     super.initState();
+    loading = false;
     presenter = LoginPresenter(this);
+    _usernameController.text="kminchelle";
+    _passwordController.text="0lelplR";
   }
 
   @override
